@@ -18,7 +18,8 @@ export default function Home() {
 	useEffect(() => {
 		axios
 			.get(
-				'https://newsapi.org/v2/top-headlines?country=gb&apiKey=be53636205564675954727a0aec8cacd'
+				'https://newsapi.org/v2/top-headlines?country=gb&apiKey=' +
+					process.env.NEXT_APP_API_KEY
 			)
 			.then((res) => {
 				console.log(res.data);
