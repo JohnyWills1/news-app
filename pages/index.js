@@ -1,5 +1,5 @@
-import Head from 'next/head';
-import styles from '../styles/Home.module.css';
+import Head from "next/head";
+import styles from "../styles/Home.module.css";
 import {
 	Box,
 	Flex,
@@ -13,26 +13,28 @@ import {
 	Breadcrumb,
 	BreadcrumbItem,
 	BreadcrumbLink,
-} from '@chakra-ui/core';
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { SearchOptions } from '../components/SearchOptions';
+	Text,
+} from "@chakra-ui/core";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { SearchOptions } from "../components/SearchOptions";
 
 export default function Home() {
 	const [articles, setArticles] = useState([]);
-	const [country, setCountry] = useState('gb');
-	const [category, setCategory] = useState('general');
+	const [country, setCountry] = useState("gb");
+	const [category, setCategory] = useState("general");
 	const [searchTerm, setSearchTerm] = useState();
+	const [searchResults, setSearchResults] = useState(20);
 
 	useEffect(() => {
 		axios
 			.get(
-				'https://newsapi.org/v2/top-headlines?' +
-					'category=' +
+				"https://newsapi.org/v2/top-headlines?" +
+					"category=" +
 					category +
-					'&country=' +
+					"&country=" +
 					country +
-					'&apiKey=' +
+					"&apiKey=" +
 					process.env.NEXT_PUBLIC_API_KEY
 			)
 			.then((res) => {
@@ -46,11 +48,13 @@ export default function Home() {
 	function countryChange(cName) {
 		axios
 			.get(
-				'https://newsapi.org/v2/top-headlines?country=' +
+				"https://newsapi.org/v2/top-headlines?country=" +
 					cName +
-					'&category=' +
+					"&category=" +
 					category +
-					'&apiKey=' +
+					"&pageSize=" +
+					searchResults +
+					"&apiKey=" +
 					process.env.NEXT_PUBLIC_API_KEY
 			)
 			.then((res) => {
@@ -65,11 +69,13 @@ export default function Home() {
 	function categoryChange(cat) {
 		axios
 			.get(
-				'https://newsapi.org/v2/top-headlines?category=' +
+				"https://newsapi.org/v2/top-headlines?category=" +
 					cat +
-					'&country=' +
+					"&country=" +
 					country +
-					'&apiKey=' +
+					"&pageSize=" +
+					searchResults +
+					"&apiKey=" +
 					process.env.NEXT_PUBLIC_API_KEY
 			)
 			.then((res) => {
@@ -84,9 +90,11 @@ export default function Home() {
 	function searchArticles(q) {
 		axios
 			.get(
-				'https://newsapi.org/v2/everything?q=' +
+				"https://newsapi.org/v2/everything?q=" +
 					q +
-					'&apiKey=' +
+					"&pageSize=" +
+					searchResults +
+					"&apiKey=" +
 					process.env.NEXT_PUBLIC_API_KEY
 			)
 			.then((res) => {
@@ -97,6 +105,10 @@ export default function Home() {
 			.catch((error) => {
 				console.log(error);
 			});
+	}
+
+	function resultsChange(resultsNumber) {
+		setSearchResults(resultsNumber);
 	}
 
 	return (
@@ -115,15 +127,16 @@ export default function Home() {
 				pt={5}
 				pb={5}
 				borderWidth='0 0 1px 0'
+				flexWrap='wrap'
 			>
 				<Flex pl={5}>
 					<Breadcrumb>
 						<BreadcrumbItem>
-							<p>{country}</p>
+							<Text>{country}</Text>
 						</BreadcrumbItem>
 
 						<BreadcrumbItem>
-							<p>{category}</p>
+							<Text>{category}</Text>
 						</BreadcrumbItem>
 					</Breadcrumb>
 				</Flex>
@@ -132,6 +145,7 @@ export default function Home() {
 						searchArticles={searchArticles}
 						countryChange={countryChange}
 						categoryChange={categoryChange}
+						changeResults={resultsChange}
 					/>
 				</Flex>
 			</Flex>
@@ -139,23 +153,23 @@ export default function Home() {
 			<Flex justify='center' align='center' flexDirection='column' p={5}>
 				{searchTerm && (
 					<Heading pb={5} size='lg'>
-						Results for - {searchTerm} - {articles.length}
+						Results for - "{searchTerm}"
 					</Heading>
 				)}
-				<SimpleGrid columns={4} spacing={3}>
+				<SimpleGrid minChildWidth='400px' spacing={3}>
 					{articles.map((article) => (
-						<Box borderWidth='1px' rounded='lg' overflow='hidden' maxW='sm'>
+						<Box borderWidth='1px' rounded='lg' overflow='hidden' height='100%'>
 							{article.urlToImage ? (
 								<Image src={article.urlToImage} />
 							) : (
-								<div style={{ display: 'flex', justifyContent: 'center' }}>
-									<Image src={require('../static/image-not-found.png')} />
+								<div style={{ display: "flex", justifyContent: "center" }}>
+									<Image src={require("../static/image-not-found.png")} />
 								</div>
 							)}
 
 							<Box p='6'>
 								<Link href={article.url}>
-									{' '}
+									{" "}
 									<Box
 										d='flex'
 										alignItems='center'
@@ -166,14 +180,14 @@ export default function Home() {
 									</Box>
 								</Link>
 								<Flex flexWrap='wrap' mt={2}>
-									<Badge variantColor='orange' m={'20px 20px 0 0'}>
+									<Badge variantColor='orange' m={"20px 20px 0 0"}>
 										{article.source.name}
 									</Badge>
-									<Badge variantColor='teal' m={'20px 20px 0 0'}>
-										{article.publishedAt.split('T')[0]}
+									<Badge variantColor='teal' m={"20px 20px 0 0"}>
+										{article.publishedAt.split("T")[0]}
 									</Badge>
 									{article.author && article.author.length < 50 && (
-										<Badge variantColor='blue' m={'20px 20px 0 0'}>
+										<Badge variantColor='blue' m={"20px 20px 0 0"}>
 											{article.author}
 										</Badge>
 									)}

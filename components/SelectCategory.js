@@ -1,5 +1,5 @@
-import { Select } from '@chakra-ui/core';
-import React from 'react';
+import { Select } from "@chakra-ui/core";
+import React from "react";
 
 const SelectCountry = ({ reloadFunction }) => {
 	return (

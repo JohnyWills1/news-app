@@ -11,6 +11,7 @@
     "@chakra-ui/core": "^0.8.0",
     "@emotion/core": "^10.0.35",
     "@emotion/styled": "^10.0.27",
+    "axios": "^0.20.0",
     "emotion-theming": "^10.0.27",
     "next": "9.5.3",
     "next-images": "^1.6.0",
