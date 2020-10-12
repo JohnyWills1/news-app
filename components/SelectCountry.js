@@ -1,10 +1,11 @@
-import { Select } from "@chakra-ui/core";
-import React from "react";
+import { Select } from '@chakra-ui/core';
+import React from 'react';
 
 const SelectCountry = ({ reloadFunction }) => {
 	return (
 		<Select
 			placeholder='Select a country'
+			width='100%'
 			onChange={(e) => {
 				const cName = e.target.value;
 				reloadFunction(cName);

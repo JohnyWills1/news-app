@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
 	Flex,
 	Box,
@@ -10,15 +10,12 @@ import {
 	SliderFilledTrack,
 	SliderThumb,
 	Text,
-} from "@chakra-ui/core";
-import SelectCountry from "./SelectCountry";
-import SelectCategory from "./SelectCategory";
+} from '@chakra-ui/core';
 
 export const SearchOptions = ({
-	countryChange,
-	categoryChange,
 	searchArticles,
 	changeResults,
+	changeSortBy,
 }) => {
 	const [results, setResults] = useState(20);
 
@@ -27,7 +24,7 @@ export const SearchOptions = ({
 			<Box pr={5}>
 				<Input
 					placeholder='Search for specific topics'
-					width='250px'
+					width='100%'
 					onKeyPress={(e) => {
 						if (e.which === 13) {
 							searchArticles(e.target.value);
@@ -36,9 +33,20 @@ export const SearchOptions = ({
 				/>
 			</Box>
 			<Box pr={5}>
+				<Select
+					onChange={(e) => {
+						changeSortBy(e.target.value);
+					}}
+				>
+					<option value='relevancy'>Relevancy</option>
+					<option value='popularity'>Popularity</option>
+					<option value='publishedAt'>Published At</option>
+				</Select>
+			</Box>
+			<Box>
 				<Text>Number of Results: {results}</Text>
 				<Slider
-					defaultValue={20}
+					defaultValue={results}
 					max={100}
 					min={20}
 					step={5}
@@ -51,12 +59,6 @@ export const SearchOptions = ({
 					<SliderFilledTrack />
 					<SliderThumb />
 				</Slider>
-			</Box>
-			<Box pr={5}>
-				<SelectCountry reloadFunction={countryChange} />
-			</Box>
-			<Box pr={5}>
-				<SelectCategory reloadFunction={categoryChange} />
 			</Box>
 		</>
 	);

@@ -1,5 +1,5 @@
-import Head from "next/head";
-import styles from "../styles/Home.module.css";
+import Head from 'next/head';
+import styles from '../styles/Home.module.css';
 import {
 	Box,
 	Flex,
@@ -14,27 +14,29 @@ import {
 	BreadcrumbItem,
 	BreadcrumbLink,
 	Text,
-} from "@chakra-ui/core";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { SearchOptions } from "../components/SearchOptions";
+} from '@chakra-ui/core';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { SearchOptions } from '../components/SearchOptions';
+import { SelectOptions } from '../components/SelectOptions';
 
 export default function Home() {
 	const [articles, setArticles] = useState([]);
-	const [country, setCountry] = useState("gb");
-	const [category, setCategory] = useState("general");
+	const [country, setCountry] = useState('gb');
+	const [category, setCategory] = useState('general');
 	const [searchTerm, setSearchTerm] = useState();
 	const [searchResults, setSearchResults] = useState(20);
+	const [sortType, setSortType] = useState('relevancy');
 
 	useEffect(() => {
 		axios
 			.get(
-				"https://newsapi.org/v2/top-headlines?" +
-					"category=" +
+				'https://newsapi.org/v2/top-headlines?' +
+					'category=' +
 					category +
-					"&country=" +
+					'&country=' +
 					country +
-					"&apiKey=" +
+					'&apiKey=' +
 					process.env.NEXT_PUBLIC_API_KEY
 			)
 			.then((res) => {
@@ -48,13 +50,13 @@ export default function Home() {
 	function countryChange(cName) {
 		axios
 			.get(
-				"https://newsapi.org/v2/top-headlines?country=" +
+				'https://newsapi.org/v2/top-headlines?country=' +
 					cName +
-					"&category=" +
+					'&category=' +
 					category +
-					"&pageSize=" +
+					'&pageSize=' +
 					searchResults +
-					"&apiKey=" +
+					'&apiKey=' +
 					process.env.NEXT_PUBLIC_API_KEY
 			)
 			.then((res) => {
@@ -69,13 +71,13 @@ export default function Home() {
 	function categoryChange(cat) {
 		axios
 			.get(
-				"https://newsapi.org/v2/top-headlines?category=" +
+				'https://newsapi.org/v2/top-headlines?category=' +
 					cat +
-					"&country=" +
+					'&country=' +
 					country +
-					"&pageSize=" +
+					'&pageSize=' +
 					searchResults +
-					"&apiKey=" +
+					'&apiKey=' +
 					process.env.NEXT_PUBLIC_API_KEY
 			)
 			.then((res) => {
@@ -88,13 +90,16 @@ export default function Home() {
 	}
 
 	function searchArticles(q) {
+		console.log(sortType);
 		axios
 			.get(
-				"https://newsapi.org/v2/everything?q=" +
+				'https://newsapi.org/v2/everything?q=' +
 					q +
-					"&pageSize=" +
+					'&pageSize=' +
 					searchResults +
-					"&apiKey=" +
+					'&sortBy=' +
+					sortType +
+					'&apiKey=' +
 					process.env.NEXT_PUBLIC_API_KEY
 			)
 			.then((res) => {
@@ -111,6 +116,10 @@ export default function Home() {
 		setSearchResults(resultsNumber);
 	}
 
+	function changeSortBy(sortType) {
+		setSortType(sortType);
+	}
+
 	return (
 		<>
 			<Head>
@@ -124,10 +133,9 @@ export default function Home() {
 			<Flex
 				justify='space-between'
 				align='center'
-				pt={5}
-				pb={5}
+				pt={2}
+				pb={2}
 				borderWidth='0 0 1px 0'
-				flexWrap='wrap'
 			>
 				<Flex pl={5}>
 					<Breadcrumb>
@@ -138,14 +146,24 @@ export default function Home() {
 						<BreadcrumbItem>
 							<Text>{category}</Text>
 						</BreadcrumbItem>
+
+						{searchTerm && (
+							<BreadcrumbItem>
+								<Text>"{searchTerm}"</Text>
+							</BreadcrumbItem>
+						)}
 					</Breadcrumb>
 				</Flex>
-				<Flex>
-					<SearchOptions
-						searchArticles={searchArticles}
+
+				<Flex align='center' pr={5}>
+					<SelectOptions
 						countryChange={countryChange}
 						categoryChange={categoryChange}
+					/>
+					<SearchOptions
+						searchArticles={searchArticles}
 						changeResults={resultsChange}
+						changeSortBy={changeSortBy}
 					/>
 				</Flex>
 			</Flex>
@@ -162,14 +180,13 @@ export default function Home() {
 							{article.urlToImage ? (
 								<Image src={article.urlToImage} />
 							) : (
-								<div style={{ display: "flex", justifyContent: "center" }}>
-									<Image src={require("../static/image-not-found.png")} />
+								<div style={{ display: 'flex', justifyContent: 'center' }}>
+									<Image src={require('../static/image-not-found.png')} />
 								</div>
 							)}
 
 							<Box p='6'>
 								<Link href={article.url}>
-									{" "}
 									<Box
 										d='flex'
 										alignItems='center'
@@ -180,14 +197,14 @@ export default function Home() {
 									</Box>
 								</Link>
 								<Flex flexWrap='wrap' mt={2}>
-									<Badge variantColor='orange' m={"20px 20px 0 0"}>
+									<Badge variantColor='orange' m={'20px 20px 0 0'}>
 										{article.source.name}
 									</Badge>
-									<Badge variantColor='teal' m={"20px 20px 0 0"}>
-										{article.publishedAt.split("T")[0]}
+									<Badge variantColor='teal' m={'20px 20px 0 0'}>
+										{article.publishedAt.split('T')[0]}
 									</Badge>
 									{article.author && article.author.length < 50 && (
-										<Badge variantColor='blue' m={"20px 20px 0 0"}>
+										<Badge variantColor='blue' m={'20px 20px 0 0'}>
 											{article.author}
 										</Badge>
 									)}
