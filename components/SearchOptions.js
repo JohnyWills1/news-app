@@ -10,6 +10,7 @@ import {
 	SliderFilledTrack,
 	SliderThumb,
 	Text,
+	Icon,
 } from '@chakra-ui/core';
 
 export const SearchOptions = ({
@@ -50,6 +51,7 @@ export const SearchOptions = ({
 					max={100}
 					min={20}
 					step={5}
+					color='green'
 					onChange={(e) => {
 						setResults(e);
 						changeResults(e);
@@ -57,7 +59,9 @@ export const SearchOptions = ({
 				>
 					<SliderTrack />
 					<SliderFilledTrack />
-					<SliderThumb />
+					<SliderThumb size={6}>
+						<Icon name='search' color='green.500' />
+					</SliderThumb>
 				</Slider>
 			</Box>
 		</>

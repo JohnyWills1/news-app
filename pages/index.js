@@ -103,7 +103,6 @@ export default function Home() {
 					process.env.NEXT_PUBLIC_API_KEY
 			)
 			.then((res) => {
-				console.log(res.data);
 				setSearchTerm(q);
 				setArticles(res.data.articles);
 			})
@@ -155,11 +154,14 @@ export default function Home() {
 					</Breadcrumb>
 				</Flex>
 
-				<Flex align='center' pr={5}>
+				<Flex align='center' justify='center'>
 					<SelectOptions
 						countryChange={countryChange}
 						categoryChange={categoryChange}
 					/>
+				</Flex>
+
+				<Flex align='center' pr={5}>
 					<SearchOptions
 						searchArticles={searchArticles}
 						changeResults={resultsChange}
