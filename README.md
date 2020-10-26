@@ -14,3 +14,5 @@ yarn dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+![App Example](/static/news-app-example.png)
